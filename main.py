@@ -6,13 +6,15 @@ from pymorphy3 import MorphAnalyzer
 
 
 def extract_matching_pairs(text):
-    words = nltk.word_tokenize(text)
+    sentences = nltk.sent_tokenize(text)  # Сегментация текста на предложения
     pairs = []
-    for i in range(len(words) - 1):
-        word1, word2 = m.parse(words[i])[0], m.parse(words[i + 1])[0]
-        if ((word1.tag.POS == 'NOUN' or word1.tag.POS == 'ADJF') and (word2.tag.POS == 'NOUN' or word2.tag.POS == 'ADJF') and
-                (word1.tag.case == word2.tag.case) and (word1.tag.number == word2.tag.number) and (word1.tag.gender == word2.tag.gender)):
-            pairs.append((word1.normal_form, word2.normal_form))
+    for sentence in sentences:
+        words = nltk.word_tokenize(sentence)  # Токенизация предложения
+        for i in range(len(words) - 1):
+            word1, word2 = m.parse(words[i])[0], m.parse(words[i + 1])[0]
+            if ((word1.tag.POS == 'NOUN' or word1.tag.POS == 'ADJF') and (word2.tag.POS == 'NOUN' or word2.tag.POS == 'ADJF') and
+                    (word1.tag.case == word2.tag.case) and (word1.tag.number == word2.tag.number) and (word1.tag.gender == word2.tag.gender)):
+                pairs.append((word1.normal_form, word2.normal_form))
     return pairs
 
 
